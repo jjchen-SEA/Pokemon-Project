@@ -1,0 +1,41 @@
+from google.colab import drive
+drive.mount('/content/drive')
+
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from matplotlib import pyplot as plt
+import matplotlib.image as mpimg
+import zipfile
+import os
+from pathlib import Path
+import re
+import tensorflow as tf
+from tensorflow import keras
+from keras import layers
+from PIL import Image 
+import glob
+
+data = pd.read_csv('/content/pokemon.csv')
+
+data = data.sort_values(by=['Name'], ascending=True).reset_index(drop=True)
+
+directory = r'/content/drive/MyDrive/images/images/' 
+for filename in os.listdir(directory): 
+    if filename.endswith('.jpg'): 
+        prefix = filename.split('.jpg')[0]
+        # im = Image.open(filename)
+        os.rename(os.path.join(directory, filename), os.path.join(directory, prefix+'.png'))
+    else: 
+        continue
+
+path = r'/content/drive/MyDrive/images/images/'
+fig,(ax1, ax2, ax3, ax4, ax5, ax6) = plt.subplots(1, 6, figsize=(15, 10))
+ax = [ax1, ax2, ax3, ax4, ax5, ax6]
+for i in range(6):
+    img = mpimg.imread(path+data['Name'][i**3]+'.png', 0)
+    ax[i].imshow(img)
+    ax[i].set_title(data['Name'][i**3])
+    ax[i].axis('off')
+plt.tight_layout()
+plt.show()
